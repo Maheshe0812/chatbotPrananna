@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <h1>Congratulations</h1>
+  This is your new Page
+  </head>
+  <body>
+    <script type="text/javascript">
+      // ---------- Visitor tracking (localStorage) ----------
+      (function() {
+        try {
+          // Respect consent logic if you have one; if so, wrap this block with consent check.
+          const raw = localStorage.getItem('visit_count');
+          const current = parseInt(raw || '0', 10);
+          const next = current + 1;
+          localStorage.setItem('visit_count', String(next));
+    
+          // mark as returning if > 1
+          window.__VISIT_COUNT = next;
+          window.__IS_RETURNING_VISITOR = next > 1;
+    
+          // optional: store a timestamp of last visit
+          localStorage.setItem('last_visit_ts', String(new Date().toISOString()));
+        } catch (e) {
+          // localStorage may be disabled; default to new visitor
+          window.__VISIT_COUNT = 1;
+          window.__IS_RETURNING_VISITOR = false;
+          console.warn('localStorage unavailable; defaulted visit_count to 1', e);
+        }
+      })();
+    
+      // ---------- Embedded Messaging init ----------
+      function initEmbeddedMessaging() {
+        try {
+          // language unchanged
+          embeddedservice_bootstrap.settings.language = 'en_US';
+    
+          // make sure extraPrechatFormDetails exists and push our values
+          embeddedservice_bootstrap.settings.extraPrechatFormDetails =
+            embeddedservice_bootstrap.settings.extraPrechatFormDetails || [];
+    
+          // push visit_count
+          embeddedservice_bootstrap.settings.extraPrechatFormDetails.push({
+            label: 'visit_count',
+            value: String(window.__VISIT_COUNT || 1),
+            displayToAgent: false
+            // optional: transcriptFields: ['Visit_Count__c']
+          });
+    
+          // push is_returning flag (bot/flow can branch on this)
+          embeddedservice_bootstrap.settings.extraPrechatFormDetails.push({
+            label: 'is_returning_visitor',
+            value: String(window.__IS_RETURNING_VISITOR || false),
+            displayToAgent: false
+            // optional: transcriptFields: ['Is_Returning__c']
+          });
+    
+          // Initialize Embedded Messaging (same as your original)
+             embeddedservice_bootstrap.init(
+                    '00Dca000003D2wm',
+                    'Chatbot_Shopify_Staging',
+                    'https://tonal--prasannan.sandbox.my.site.com/ESWChatbotShopifyStagin1759293757846',
+                    {
+                        scrt2URL: 'https://tonal--prasannan.sandbox.my.salesforce-scrt.com'
+                    }
+                );
+        } catch (err) {
+          console.error('Error loading Embedded Messaging: ', err);
+        }
+      }
+    </script>
+    
+    <script
+      type="text/javascript"
+      src="https://tonal--prasannan.sandbox.my.site.com/ESWChatbotShopifyStagin1759293757846/assets/js/bootstrap.min.js"
+      onload="initEmbeddedMessaging()"
+    ></script>
+  </body>
+</html>
