@@ -74,5 +74,163 @@
       src="https://tonal--prasannan.sandbox.my.site.com/ESWChatbotShopifyStagin1759293757846/assets/js/bootstrap.min.js"
       onload="initEmbeddedMessaging()"
     ></script>
+    <script>
+
+//event listener which listens to every message/event from the Iframe
+
+window.addEventListener("message", (event) => {
+
+if ((event.data.method === "EMBEDDED_MESSAGING_DISPATCH_EVENT_TO_HOST" && event.data.data.eventDetails.conversationEntry && event.data.data.eventDetails.conversationEntry.entryPayload)) {
+
+let payload = JSON.parse(event.data.data.eventDetails.conversationEntry.entryPayload)
+
+    if( payload.abstractMessage && payload.abstractMessage.choices) {
+
+postIframeDisable();
+
+}
+
+    else if(payload.abstractMessage && payload.abstractMessage.choicesResponse){
+
+       postIframeEnable();
+
+    }
+
+}
+
+});
+
+
+//posting message to enable user input
+
+function postIframeEnable(){
+
+var iframe = document.getElementById("embeddedMessagingFrame");
+
+   iframe.contentWindow.postMessage('InputEnable');
+
+}
+
+ 
+
+//posting message to disable user input
+
+function postIframeDisable(){
+
+var iframe = document.getElementById("embeddedMessagingFrame");
+
+   iframe.contentWindow.postMessage('InputDisable');
+
+}
+<script>
+
+ 
+
+//this function enables disabled user input in the embedded messaging by over writing iframe css
+
+function removeStylesheet(){
+
+var style = document.createElement('style');
+
+style.id = 'embeddedMessagingBootstrapStyles';
+
+style.type = 'text/css';
+
+style.innerHTML = `
+
+.slds-file-selector.slds-file-selector_files,.emojiButtonWrapper {
+
+display: none !important;
+
+}
+
+ 
+
+.embeddedMessagingInputFooterTextArea.slds-textarea {
+
+caret-color: auto !important;
+
+background-color: white !important;
+
+pointer-events: auto !important;
+
+user-select: auto !important;
+
+}
+
+ 
+
+.embeddedMessagingInputTextAreaWrapper {
+
+cursor: allowed !important;
+
+}
+
+`;
+
+document.head.appendChild(style);
+
+}
+
+
+//this function disables user input in the embedded messaging by over writing iframe css
+
+function addBlockStylesheet(){
+
+var style = document.createElement('style');
+
+style.id = 'embeddedMessagingBootstrapStyles';
+
+style.type = 'text/css';
+
+style.innerHTML = `
+
+.slds-file-selector.slds-file-selector_files,
+
+.emojiButtonWrapper {
+
+    display: none !important;
+
+}
+
+ 
+
+.embeddedMessagingInputFooterTextArea.slds-textarea {
+
+    caret-color: transparent !important;
+
+    background-color: lightgrey !important;
+
+    pointer-events: none !important;
+
+    user-select: none !important;
+
+}
+
+ 
+
+.embeddedMessagingInputTextAreaWrapper {
+
+    cursor: not-allowed !important;
+
+}`;
+
+document.head.appendChild(style);
+
+}
+
+ 
+
+window.addEventListener('message', (e)=>{
+
+if(e.data == 'InputEnable'){removeStylesheet()}
+
+if(e.data == 'InputDisable'){addBlockStylesheet()}
+
+});
+
+</script>
+</script>
+    
   </body>
 </html>
