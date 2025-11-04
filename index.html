@@ -103,8 +103,10 @@ var iframe = document.getElementById("embeddedMessagingFrame");
 
 //posting message to disable user input
 function postIframeDisable(){
+  const iframe = document.getElementById('embeddedMessagingFrame');
+  const targetOrigin = new URL(iframe.src).origin;
 var iframe = document.getElementById("embeddedMessagingFrame");
-   iframe.contentWindow.postMessage('InputDisable');
+   iframe.contentWindow.postMessage('InputDisable', targetOrigin);
   console.log('Input Disable');
 }
 
