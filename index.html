@@ -95,7 +95,8 @@ postIframeDisable();
 
 function postIframeEnable(){
 var iframe = document.getElementById("embeddedMessagingFrame");
-   iframe.contentWindow.postMessage('InputEnable');
+  const targetOrigin = new URL(iframe.src).origin;
+   iframe.contentWindow.postMessage('InputEnable', targetOrigin);
   console.log('Input Enable');
 }
 
