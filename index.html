@@ -96,6 +96,7 @@ postIframeDisable();
 function postIframeEnable(){
 var iframe = document.getElementById("embeddedMessagingFrame");
    iframe.contentWindow.postMessage('InputEnable');
+  console.log('Input Enable');
 }
 
  
@@ -104,6 +105,7 @@ var iframe = document.getElementById("embeddedMessagingFrame");
 function postIframeDisable(){
 var iframe = document.getElementById("embeddedMessagingFrame");
    iframe.contentWindow.postMessage('InputDisable');
+  console.log('Input Disable');
 }
 
 </script>
